@@ -1,0 +1,24 @@
+{
+  "title": "US Drought Monitor",
+  "description": "US Drought Monitor.",
+  "identifier": "owf-data-us-drought-monitor",
+  "landingPage": "https://data.openwaterfoundation.org/country/us/usdm/drought-monitor/",
+  "issued": "2022-07-28",
+  "keyword": [
+    "point",
+    "farms"
+  ],
+  "publisher": {
+    "name": "Open Water Foundation",
+    "mbox": "info@openwaterfoundation.org"
+  },
+  "distribution": [
+    {
+      "accessURL": "",
+      "byteSize": null,
+      "description": "Resource locator",
+      "format": "application/geo+json",
+      "title": "US Drought Monitor"
+    }
+  ]
+}
