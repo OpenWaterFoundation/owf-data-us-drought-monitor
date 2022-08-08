@@ -7,9 +7,9 @@ for use in web applications.
 
 The following files can be downloaded or used directly.
 
-| **Layer File** | **Description** |
-| -- | -- |
-| [`us-drought-monitor-current.geojson`](us-drought-monitor-current.geojson) | Current US Drought Monitor. |
+| **Layer File** | **Description** | **View** |
+| -- | -- | -- |
+| [`us-drought-monitor-current.geojson`](us-drought-monitor-current.geojson) | Current US Drought Monitor. | [View](https://gavinr.github.io/geojson-viewer/?url=https://data.openwaterfoundation.org/country/us/usdm/drought-monitor/us-drought-monitor-current.geojson) |
 
 ## Workflow ##
 
