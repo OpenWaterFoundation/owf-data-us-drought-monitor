@@ -4,7 +4,7 @@ StartLog(LogFile="results/02-upload-dataset-to-s3.tstool.log")
 #
 # Define controlling properties:
 # - InsertsFolder is the location of data.openwaterfoundation.org inserts for the landing page
-SetProperty(PropertyName="InsertsFolder",PropertyType=String,PropertyValue="../../owf-website-data/inserts")
+SetProperty(PropertyName="InsertsFolder",PropertyType="String",PropertyValue="../../owf-website-data/inserts")
 #
 # Upload the files:
 # - geojson file output by GeoProcessor
@@ -16,14 +16,16 @@ AwsS3(S3Command="UploadObjects",Region="us-west-2",Bucket="data.openwaterfoundat
 AwsCloudFront(CloudFrontCommand="InvalidateDistribution",Region="aws-global",Comment="*data.openwaterfoundation.org*",InvalidationPaths="/country/us/usdm/drought-monitor/*")
 #
 # Create the dataset catalog with landing page:
+# - AwsS3Catalog command is disabled so use the new AwsS3Dataset command
 # - also list invalidations to see what is in process
-AwsS3Catalog(Region="us-west-2",Bucket="data.openwaterfoundation.org",StartingPrefix="country/us/usdm/drought-monitor/",DistributionId="*data.openwaterfoundation.org*",DatasetIndexFile="results/dataset-index.html",DatasetIndexHeadFile="${InsertsFolder}/head-insert.html",DatasetIndexBodyFile="${InsertsFolder}/body-nav-insert.html",DatasetIndexFooterFile="${InsertsFolder}/footer-insert.html",UploadDatasetFiles=True,OutputTableID="Datasets",KeepFiles=True)
+AwsS3LandingPage(Region="us-west-2",Bucket="data.openwaterfoundation.org",DatasetIndexFile="results/dataset-index.html",StartingFolder="country/us/usdm/drought-monitor/",ProcessSubfolders="False",KeepFiles="True",UploadFiles="True",DatasetIndexHeadInsertTopFiles="${InsertsFolder}/head-insert.html",DatasetIndexBodyInsertTopFiles="${InsertsFolder}/body-nav-insert.html",DatasetIndexBodyInsertBottomFiles="${InsertsFolder}/body-footer-insert.html",InvalidateCloudFront="True",CloudFrontRegion="aws-global",CloudFrontComment="*data.openwaterfoundation.org*")
+# AwsS3Catalog(Region="us-west-2",Bucket="data.openwaterfoundation.org",StartingPrefix="country/us/usdm/drought-monitor/",DatasetIndexFile="results/dataset-index.html",DatasetIndexHeadFile="${InsertsFolder}/head-insert.html",DatasetIndexBodyFile="${InsertsFolder}/body-nav-insert.html",DatasetIndexFooterFile="${InsertsFolder}/footer-insert.html",UploadDatasetFiles="True",DistributionId="*data.openwaterfoundation.org*",OutputTableID="Datasets",KeepFiles="True")
 # AwsCloudFront(CloudFrontCommand="ListInvalidations",Region="af-south-1",OutputTableID="InvalidationList")
 # Compare the local and S3 file to see how long it takes to be avaialable on S3.
-CompareFiles(InputFile1="results/dataset-index.html",InputFile2="https://s3.us-west-2.amazonaws.com/data.openwaterfoundation.org/country/us/usdm/drought-monitor/index.html",IfDifferent=Warn,WaitUntil=FilesAreSame,WaitTimeout=600000,WaitInterval=60000)
+CompareFiles(InputFile1="results/dataset-index.html",InputFile2="https://s3.us-west-2.amazonaws.com/data.openwaterfoundation.org/country/us/usdm/drought-monitor/index.html",IfDifferent="Warn",WaitUntil="FilesAreSame",WaitTimeout="600000",WaitInterval="60000")
 # Compare the local and CloudFront file to see how long it takes to be avaialable on CloudFront.
-CompareFiles(InputFile1="results/dataset-index.html",InputFile2="https://data.openwaterfoundation.org/country/us/usdm/drought-monitor/index.html",IfDifferent=Warn,WaitUntil=FilesAreSame,WaitTimeout=600000,WaitInterval=60000)
+CompareFiles(InputFile1="results/dataset-index.html",InputFile2="https://data.openwaterfoundation.org/country/us/usdm/drought-monitor/index.html",IfDifferent="Warn",WaitUntil="FilesAreSame",WaitTimeout="600000",WaitInterval="60000")
 # Compare the index.html and folder name URLs to make sure that all variants were invalidated:
 # - the AWS configuration should automatically add index.html to folders
-CompareFiles(InputFile1="https://data.openwaterfoundation.org/country/us/usdm/drought-monitor/index.html",InputFile2="https://data.openwaterfoundation.org/country/us/usdm/drought-monitor/",IfDifferent=Warn,WaitUntil=FilesAreSame,WaitTimeout=600000,WaitInterval=60000)
-CompareFiles(InputFile1="https://data.openwaterfoundation.org/country/us/usdm/drought-monitor/index.html",InputFile2="https://data.openwaterfoundation.org/country/us/usdm/drought-monitor",IfDifferent=Warn,WaitUntil=FilesAreSame,WaitTimeout=600000,WaitInterval=60000)
+CompareFiles(InputFile1="https://data.openwaterfoundation.org/country/us/usdm/drought-monitor/index.html",InputFile2="https://data.openwaterfoundation.org/country/us/usdm/drought-monitor/",IfDifferent="Warn",WaitUntil="FilesAreSame",WaitTimeout="600000",WaitInterval="60000")
+CompareFiles(InputFile1="https://data.openwaterfoundation.org/country/us/usdm/drought-monitor/index.html",InputFile2="https://data.openwaterfoundation.org/country/us/usdm/drought-monitor",IfDifferent="Warn",WaitUntil="FilesAreSame",WaitTimeout="600000",WaitInterval="60000")
